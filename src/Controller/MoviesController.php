@@ -12,6 +12,12 @@ use App\Controller\AppController;
 class MoviesController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+    }
+
     /**
      * Index method
      *
@@ -53,11 +59,8 @@ class MoviesController extends AppController
         if ($this->request->is('post')) {
             $movie = $this->Movies->patchEntity($movie, $this->request->getData());
             if ($this->Movies->save($movie)) {
-                $this->Flash->success(__('The movie has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->index();
             }
-            $this->Flash->error(__('The movie could not be saved. Please, try again.'));
         }
         $this->set(compact('movie'));
         $this->set('_serialize', ['movie']);
@@ -78,11 +81,8 @@ class MoviesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $movie = $this->Movies->patchEntity($movie, $this->request->getData());
             if ($this->Movies->save($movie)) {
-                $this->Flash->success(__('The movie has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->index();
             }
-            $this->Flash->error(__('The movie could not be saved. Please, try again.'));
         }
         $this->set(compact('movie'));
         $this->set('_serialize', ['movie']);
@@ -99,12 +99,8 @@ class MoviesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $movie = $this->Movies->get($id);
-        if ($this->Movies->delete($movie)) {
-            $this->Flash->success(__('The movie has been deleted.'));
-        } else {
-            $this->Flash->error(__('The movie could not be deleted. Please, try again.'));
-        }
+        $this->Movies->delete($movie);
 
-        return $this->redirect(['action' => 'index']);
+        return $this->index();
     }
 }

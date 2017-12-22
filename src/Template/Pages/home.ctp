@@ -25,19 +25,23 @@ $this->layout = false;
     <title>Jason Movie Manager</title>
 
     <?= $this->Html->meta('icon') ?>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <?= $this->Html->css('home.css') ?>
     <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
 </head>
 <body>
-    <div class="home">
-        <a href="<?= Router::url(['controller' => 'movies', 'action' => 'index']); ?>">
-            <div class="homeimage">
-                <img src="img/film.png" />
+    <a href="<?= Router::url(['controller' => 'movies', 'action' => 'index']); ?>">
+        <header class="masthead text-center text-white d-flex">
+            <div class="container my-auto">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <h1 class="text-uppercase text-white">
+                            <strong>Jason Movie Manager</strong>
+                        </h1>
+                    </div>
+                </div>
             </div>
-            <div class="hometitle">
-                <span>Jason Movie Manager</span>
-            </div>
-        </a>
-    </div>
+        </header>
+    </a>
 </body>
 </html>
