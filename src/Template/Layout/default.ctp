@@ -28,6 +28,8 @@
         }
     </style>
 
+    <?= $this->Html->css('default.css') ?>
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -58,7 +60,10 @@
     <div class="container">
         <?= $this->fetch('content') ?>
     </div>
-    <footer>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted"></p>
+        </div>
     </footer>
 </body>
 </html>

@@ -105,7 +105,7 @@
     <table id="moviegrid" class="display" cellspacing="0" width="100%">
         <thead>
         <tr>
-            <th>Id</th>
+            <th class="hidden-xs">Id</th>
             <th>Title</th>
             <th>Format</th>
             <th class="dt-body-right">Length</th>
@@ -115,7 +115,6 @@
         </tr>
         </thead>
     </table>
-
 </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -125,111 +124,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
-<script type="text/javascript">
-    var grid;
-    function edit(id) {
-      $.get({
-        url: 'movies/view/' + id + '.json',
-        success: function(data) {
-          $(Handlebars.compile($('#modal-template').html())(data.movie)).modal().on('shown.bs.modal', function() {
-            $('form', this).validator().on('submit', submit);;
-            if (data.movie.rating) {
-              $('input[name=rating][value='+data.movie.rating+']', this).prop('checked', true);
-            }
-            if (data.movie.format) {
-              $('select[name=format]', this).val(data.movie.format);
-            }
-          }).on('hidden.bs.modal', function () {
-            $(this).data('bs.modal', null);
-          });
-        }
-      });
-    }
-    function deleteMovie(id) {
-        $.post({
-          url: 'movies/delete/' + id + '.json',
-          success: function(data) {
-            grid.ajax.reload();
-          }
-        });
-    }
-    function submit (e) {
-      if (e.isDefaultPrevented()) {
-        // handle the invalid form...
-      } else {
-        e.preventDefault();
-
-        var id = $('input[name=id]', $(e.target)).val();
-
-        $.post({
-          url: '/movies/' + (id ? 'edit/' + id : 'add') + '.json',
-          data: $(e.target).serialize(),
-          success: function () {
-            grid.ajax.reload();
-            $('.modal').modal('hide');
-          }
-        });
-      }
-    }
-  $(document).ready(function() {
-    grid = $('#moviegrid').on('draw.dt', function() {
-      $('.glyphicon-pencil').off('click');
-      $('.glyphicon-pencil').on('click', function() {
-        edit($(this).data('id'));
-      });
-      $('.glyphicon-remove').off('click');
-      $('.glyphicon-remove').on('click', function() {
-        deleteMovie($(this).data('id'));
-      });
-    }).DataTable({
-        ajax: {
-          dataSrc: 'movies',
-          url: 'movies/index.json'
-        },
-        columns: [
-          {data: 'id'},
-          {
-            className: 'dt-body-right',
-            data: 'title'
-          },
-          {
-            className: 'dt-body-right',
-            data: 'format',
-          },
-          {
-            className: 'dt-body-right',
-            data: 'length',
-            render: function(data, type, row, meta) {
-              return Math.floor(data/60) + ' hr ' + (data%60) + ' m';
-            }
-          },
-          {
-            className: 'dt-body-right',
-            data: 'release_year'
-          },
-          {
-            data: 'rating',
-            className: 'dt-body-right'
-          },
-          {
-            data: 'id',
-            orderable: false,
-            render: function(data) {
-              return '<span data-id="' + data + '" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></span>' +
-                '<span data-id="' + data + '" style="cursor:pointer; padding-left:10px;" class="glyphicon glyphicon-remove"></span>';
-            }
-          }
-        ]
-  });
-
-    $('#addMovieButton').on('click', function() {
-      $(Handlebars.compile($('#modal-template').html())()).modal().on('shown.bs.modal', function() {
-        $('form', this).validator().on('submit', submit);;
-      }).on('hidden.bs.modal', function () {
-        $(this).data('bs.modal', null);
-      });
-    });
-
-
-  });
-</script>
+<script type="text/javascript" src="js/movies.js"> </script>
