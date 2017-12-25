@@ -43,6 +43,7 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('CakeDC/Users.UsersAuth', ['routes' => true, 'bootstrap' => true]);
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -50,5 +51,9 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
+    }
+
+    public function beforeRender(Event $event) {
+        $this->set('userData', $this->Auth->user());
     }
 }

@@ -53,10 +53,16 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/">Home</a></li>
                     <li class="active"><a href="/movies">Movies</a></li>
+                    <?php if (!empty($userData['id'])) : ?>
+                        <li><a href="/logout">Logout</a></li>
+                    <? endif; ?>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div>
     </nav>
+    <div class="container">
+        <?= $this->Flash->render() ?>
+    </div>
     <div class="container">
         <?= $this->fetch('content') ?>
     </div>

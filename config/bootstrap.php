@@ -216,3 +216,6 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('Migrations');
+
+Configure::write('Users.config', ['users']);
+Plugin::load('CakeDC/Users', ['routes' => true, 'bootstrap' => true]);
