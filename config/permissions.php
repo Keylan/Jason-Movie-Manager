@@ -4,7 +4,7 @@
             [
                 'role' => 'user',
                 'controller' => 'Movies',
-                'action' => ['/', 'index', 'view', 'edit', 'delete'],
+                'action' => ['/', 'index', 'view', 'add', 'edit', 'delete'],
             ],
             [
                 'role' => 'admin',
