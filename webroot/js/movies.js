@@ -3,9 +3,12 @@ function edit(id) {
   $.get({
     url: 'movies/view/' + id + '.json',
     success: function(data) {
+      data.movie.title = decodeEntities(data.movie.title);
+      data.movie.format = decodeEntities(data.movie.format);
+
       // build modal content with handlebars and retrieved data
       $(Handlebars.compile($('#modal-template').html())(data.movie)).modal().on('shown.bs.modal', function() {
-        $('form', this).validator().on('submit', submit);;
+        $('form', this).validator().on('submit', submit);
         if (data.movie.rating) {
           $('input[name=rating][value='+data.movie.rating+']', this).prop('checked', true);
         }
@@ -45,6 +48,26 @@ function submit (e) {
   }
 }
 
+var decodeEntities = (function() {
+  // this prevents any overhead from creating the object each time
+  var element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
+
 $(document).ready(function() {
   grid = $('#moviegrid').on('draw.dt', function() {
     // remove all click handlers
@@ -70,16 +93,22 @@ $(document).ready(function() {
       },
       {
         className: 'dt-body-right',
-        data: 'title'
+        data: 'title',
+        render: function(data) {
+          return decodeEntities(data);
+        }
       },
       {
         className: 'dt-body-right',
         data: 'format',
+        render: function(data) {
+          return decodeEntities(data);
+        }
       },
       {
         className: 'dt-body-right',
         data: 'length',
-        render: function(data, type, row, meta) {
+        render: function(data) {
           return Math.floor(data/60) + ' hr ' + (data%60) + ' m';
         }
       },
@@ -106,7 +135,7 @@ $(document).ready(function() {
 
   $('#addMovieButton').on('click', function() {
     $(Handlebars.compile($('#modal-template').html())()).modal().on('shown.bs.modal', function() {
-      $('form', this).validator().on('submit', submit);;
+      $('form', this).validator().on('submit', submit);
     }).on('hidden.bs.modal', function () {
       $(this).data('bs.modal', null);
     });
